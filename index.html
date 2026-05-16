@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BBL Agent Advisory - Microsoft Agent Platform Advisor</title>
+    <title>BBL Microsoft AI Tools Advisor</title>
     <style>
         * {
             margin: 0;
@@ -19,7 +19,7 @@
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
         }
 
@@ -48,7 +48,7 @@
             margin-top: 30px;
         }
 
-        @media (max-width: 968px) {
+        @media (max-width: 1200px) {
             .content {
                 grid-template-columns: 1fr;
             }
@@ -81,6 +81,19 @@
             font-size: 1em;
         }
 
+        .question-number {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 28px;
+            font-weight: 600;
+            margin-right: 8px;
+        }
+
         .question-group input[type="radio"],
         .question-group input[type="checkbox"] {
             margin-right: 8px;
@@ -93,20 +106,26 @@
             display: flex;
             align-items: center;
             margin-bottom: 10px;
-            padding: 10px;
-            border-radius: 6px;
+            padding: 12px;
+            border-radius: 8px;
             background: #f5f5f5;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: all 0.3s;
+            border: 2px solid transparent;
         }
 
         .option:hover {
             background: #e8e8f5;
+            border-color: #667eea;
         }
 
         .option input:checked + span {
             font-weight: 600;
             color: #667eea;
+        }
+
+        .option input:checked {
+            accent-color: #667eea;
         }
 
         .option span {
@@ -116,12 +135,18 @@
 
         select {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
             font-size: 1em;
             background: white;
             cursor: pointer;
+            transition: border-color 0.3s;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #667eea;
         }
 
         button {
@@ -152,48 +177,87 @@
         }
 
         .result-item {
-            background: #f9f9f9;
-            border-left: 4px solid #667eea;
-            padding: 20px;
-            margin-bottom: 15px;
-            border-radius: 6px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #fff 100%);
+            border-left: 5px solid #667eea;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 8px;
             transition: all 0.3s;
         }
 
         .result-item:hover {
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
         }
 
         .result-item h3 {
             color: #667eea;
-            margin-bottom: 10px;
-            font-size: 1.2em;
-        }
-
-        .result-item p {
-            color: #666;
-            line-height: 1.6;
-            margin-bottom: 8px;
+            font-size: 1.4em;
         }
 
         .match-score {
             display: inline-block;
-            background: #667eea;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 5px 12px;
+            padding: 8px 16px;
             border-radius: 20px;
-            font-size: 0.9em;
+            font-size: 1em;
             font-weight: 600;
         }
 
+        .result-item p {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .description-box {
+            background: #e8f4f8;
+            border-left: 4px solid #0078d4;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
         .feature-list {
-            margin: 10px 0;
-            padding-left: 20px;
+            margin: 12px 0;
+            padding-left: 25px;
         }
 
         .feature-list li {
-            margin-bottom: 5px;
+            margin-bottom: 6px;
             color: #555;
+            line-height: 1.5;
+        }
+
+        .pros {
+            background: #f0fdf4;
+            border-left: 4px solid #22c55e;
+        }
+
+        .cons {
+            background: #fef2f2;
+            border-left: 4px solid #ef4444;
+        }
+
+        .section-box {
+            background: #f9f9f9;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 12px;
+            border-left: 4px solid #667eea;
+        }
+
+        .section-box strong {
+            color: #667eea;
         }
 
         .reset-btn {
@@ -207,9 +271,9 @@
 
         .progress {
             margin-bottom: 20px;
-            height: 6px;
+            height: 8px;
             background: #e0e0e0;
-            border-radius: 3px;
+            border-radius: 4px;
             overflow: hidden;
         }
 
@@ -222,8 +286,10 @@
         .no-results {
             text-align: center;
             color: #999;
-            padding: 20px;
+            padding: 30px 20px;
             font-style: italic;
+            background: #f9f9f9;
+            border-radius: 8px;
         }
 
         footer {
@@ -231,8 +297,8 @@
             color: white;
             margin-top: 40px;
             padding-bottom: 20px;
-            font-size: 0.9em;
-            opacity: 0.8;
+            font-size: 0.95em;
+            opacity: 0.9;
         }
 
         .info-box {
@@ -242,283 +308,474 @@
             margin-bottom: 20px;
             border-radius: 6px;
             color: #333;
+            line-height: 1.6;
+        }
+
+        .tool-icon {
+            font-size: 2.5em;
+            margin-right: 10px;
+        }
+
+        .ranking-badge {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .ranking-1 { background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%); color: #333; }
+        .ranking-2 { background: linear-gradient(135deg, #c0c0c0 0%, #e8e8e8 100%); color: #333; }
+        .ranking-3 { background: linear-gradient(135deg, #cd7f32 0%, #daa520 100%); color: white; }
+
+        .comparison-table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .comparison-table th {
+            background: #f5f5f5;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        .tool-link {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        .tool-link:hover {
+            text-decoration: underline;
+        }
+
+        .recommendation-box {
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .recommendation-box strong {
+            color: #667eea;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>🤖 Agent Platform Advisor</h1>
-            <p>ช่วยคุณค้นหา Microsoft Agent Framework ที่เหมาะสมที่สุด</p>
+            <h1>🚀 Microsoft AI Tools Advisor</h1>
+            <p>ช่วยคุณเลือกเครื่องมือที่เหมาะสม: Copilot Chat, Agent Builder, Copilot Studio, Azure Foundry</p>
         </header>
 
         <div class="content">
             <!-- Questions Section -->
             <div class="section">
-                <h2>📋 แบบประเมิน</h2>
+                <h2>📋 แบบประเมินความต้องการ</h2>
                 <div class="progress">
                     <div class="progress-bar" id="progressBar" style="width: 0%"></div>
                 </div>
 
                 <div class="info-box">
-                    ตอบคำถามต่างๆ เพื่อให้ระบบแนะนำ Microsoft Agent Framework ที่ตรงกับความต้องการของคุณ
+                    ✨ ตอบคำถาม 10 ข้อเพื่อให้ระบบแนะนำเครื่องมือ Microsoft AI ที่เหมาะสมที่สุดสำหรับความต้องการของคุณ
                 </div>
 
                 <form id="advisorForm">
-                    <!-- Question 1: Agent Type -->
+                    <!-- Q1: Use Case -->
                     <div class="question-group">
-                        <label>1. ประเภทของ Agent ที่คุณต้องการ</label>
+                        <label><span class="question-number">1</span> ลักษณะการใช้งานหลัก</label>
                         <div class="option">
-                            <input type="radio" name="agentType" value="conversational" id="conversational">
-                            <span>💬 Conversational Agent (แชทบอท)</span>
+                            <input type="radio" name="useCase" value="customerService">
+                            <span>💬 Customer Service & Support (ตอบคำถามลูกค้า)</span>
                         </div>
                         <div class="option">
-                            <input type="radio" name="agentType" value="autonomous" id="autonomous">
-                            <span>🔄 Autonomous Agent (ทำงานอัตโนมัติ)</span>
+                            <input type="radio" name="useCase" value="automation">
+                            <span>🔄 Business Process Automation (อัตโนมัติกระบวนการ)</span>
                         </div>
                         <div class="option">
-                            <input type="radio" name="agentType" value="collaborative" id="collaborative">
-                            <span>👥 Collaborative Agent (หลายตัวทำงานร่วมกัน)</span>
+                            <input type="radio" name="useCase" value="research">
+                            <span>🔍 Research & Data Analysis (วิเคราะห์ข้อมูล)</span>
                         </div>
                         <div class="option">
-                            <input type="radio" name="agentType" value="expert" id="expert">
-                            <span>🧠 Expert Agent (เชี่ยวชาญเฉพาะด้าน)</span>
+                            <input type="radio" name="useCase" value="contentGeneration">
+                            <span>✍️ Content Generation (สร้างเนื้อหา)</span>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="useCase" value="integration">
+                            <span>🔗 Systems Integration (เชื่อมต่อระบบ)</span>
                         </div>
                     </div>
 
-                    <!-- Question 2: Primary Language -->
+                    <!-- Q2: Primary Language -->
                     <div class="question-group">
-                        <label>2. ภาษาโปรแกรมที่คุณต้องการใช้</label>
+                        <label><span class="question-number">2</span> ภาษาโปรแกรมที่คุณต้องการใช้</label>
                         <select name="language" id="language">
                             <option value="">-- เลือกภาษา --</option>
+                            <option value="noCode">No-Code / Low-Code (ไม่ต้องเขียนโค้ด)</option>
                             <option value="python">Python</option>
                             <option value="csharp">C# / .NET</option>
                             <option value="typescript">TypeScript / JavaScript</option>
                             <option value="java">Java</option>
-                            <option value="multi">Multi-Language / Language Agnostic</option>
+                            <option value="multilingual">Multilingual (หลายภาษา)</option>
                         </select>
                     </div>
 
-                    <!-- Question 3: LLM Provider -->
+                    <!-- Q3: Technical Expertise -->
                     <div class="question-group">
-                        <label>3. ผู้ให้บริการ LLM ที่คุณต้องการ</label>
+                        <label><span class="question-number">3</span> ระดับความเชี่ยวชาญทางเทคนิค</label>
                         <div class="option">
-                            <input type="radio" name="llmProvider" value="openai" id="openai">
-                            <span>🔷 OpenAI (GPT-4, GPT-4o)</span>
+                            <input type="radio" name="expertise" value="beginner">
+                            <span>🟢 Beginner (เริ่มต้น - ไม่ต้องรู้เขียนโค้ด)</span>
                         </div>
                         <div class="option">
-                            <input type="radio" name="llmProvider" value="azure" id="azure">
-                            <span>☁️ Azure OpenAI</span>
+                            <input type="radio" name="expertise" value="intermediate">
+                            <span>🟡 Intermediate (ระดับกลาง - มีพื้นฐาน)</span>
                         </div>
                         <div class="option">
-                            <input type="radio" name="llmProvider" value="multiple" id="multiple">
-                            <span>🔄 Multiple Providers</span>
+                            <input type="radio" name="expertise" value="advanced">
+                            <span>🔴 Advanced (ขั้นสูง - มีประสบการณ์)</span>
                         </div>
                         <div class="option">
-                            <input type="radio" name="llmProvider" value="onpremise" id="onpremise">
-                            <span>🏢 On-Premise / Self-hosted</span>
+                            <input type="radio" name="expertise" value="expert">
+                            <span>⚫ Expert (เชี่ยวชาญ - สามารถปรับแต่งได้)</span>
                         </div>
                     </div>
 
-                    <!-- Question 4: Complexity -->
+                    <!-- Q4: Integration Needs -->
                     <div class="question-group">
-                        <label>4. ระดับความซับซ้อน</label>
+                        <label><span class="question-number">4</span> ความต้องการในการเชื่อมต่อระบบ (เลือกได้หลายข้อ)</label>
                         <div class="option">
-                            <input type="radio" name="complexity" value="simple" id="simple">
-                            <span>🟢 Simple (เริ่มต้น)</span>
+                            <input type="checkbox" name="integration" value="standalone">
+                            <span>🏢 Standalone Tool (ใช้เพียงลำพัง)</span>
                         </div>
                         <div class="option">
-                            <input type="radio" name="complexity" value="moderate" id="moderate">
-                            <span>🟡 Moderate (ปานกลาง)</span>
+                            <input type="checkbox" name="integration" value="microsoft365">
+                            <span>☁️ Microsoft 365 Integration</span>
                         </div>
                         <div class="option">
-                            <input type="radio" name="complexity" value="advanced" id="advanced">
-                            <span>🔴 Advanced (ขั้นสูง)</span>
+                            <input type="checkbox" name="integration" value="teams">
+                            <span>💼 Microsoft Teams Integration</span>
+                        </div>
+                        <div class="option">
+                            <input type="checkbox" name="integration" value="apis">
+                            <span>🔌 REST APIs / Custom Integration</span>
+                        </div>
+                        <div class="option">
+                            <input type="checkbox" name="integration" value="databases">
+                            <span>🗄️ Database Connectivity</span>
                         </div>
                     </div>
 
-                    <!-- Question 5: Features -->
+                    <!-- Q5: Customization Level -->
                     <div class="question-group">
-                        <label>5. คุณสมบัติที่สำคัญ (เลือกได้หลายข้อ)</label>
+                        <label><span class="question-number">5</span> ระดับการปรับแต่ง (Customization)</label>
                         <div class="option">
-                            <input type="checkbox" name="features" value="memoryCaching">
-                            <span>💾 Memory & Caching</span>
+                            <input type="radio" name="customization" value="minimal">
+                            <span>⚡ Minimal (พร้อมใช้เลย ไม่ต้องปรับแต่ง)</span>
                         </div>
                         <div class="option">
-                            <input type="checkbox" name="features" value="toolCalling">
-                            <span>🔧 Tool/Function Calling</span>
+                            <input type="radio" name="customization" value="moderate">
+                            <span>🛠️ Moderate (ปรับแต่งขั้นพื้นฐาน)</span>
                         </div>
                         <div class="option">
-                            <input type="checkbox" name="features" value="ragRetrieval">
-                            <span>📚 RAG (Retrieval-Augmented Generation)</span>
-                        </div>
-                        <div class="option">
-                            <input type="checkbox" name="features" value="orchestration">
-                            <span>🎼 Orchestration & Workflow</span>
-                        </div>
-                        <div class="option">
-                            <input type="checkbox" name="features" value="prompt">
-                            <span>✏️ Advanced Prompt Management</span>
-                        </div>
-                        <div class="option">
-                            <input type="checkbox" name="features" value="monitoring">
-                            <span>📊 Monitoring & Logging</span>
+                            <input type="radio" name="customization" value="advanced">
+                            <span>🔧 Advanced (ปรับแต่งที่ซับซ้อน)</span>
                         </div>
                     </div>
 
-                    <!-- Question 6: Use Case -->
+                    <!-- Q6: Deployment Environment -->
                     <div class="question-group">
-                        <label>6. กรณีใช้งานหลัก</label>
-                        <select name="useCase" id="useCase">
-                            <option value="">-- เลือกกรณีใช้งาน --</option>
-                            <option value="customerService">Customer Service / Support</option>
-                            <option value="dataAnalysis">Data Analysis & Reporting</option>
-                            <option value="contentGeneration">Content Generation</option>
-                            <option value="businessProcess">Business Process Automation</option>
-                            <option value="research">Research & Information Gathering</option>
-                            <option value="codeAssistance">Code Assistance & Development</option>
-                            <option value="multiAgent">Multi-Agent Orchestration</option>
-                            <option value="other">Other / Mixed Use Cases</option>
+                        <label><span class="question-number">6</span> สภาพแวดล้อมในการปรับใช้ (Deployment)</label>
+                        <div class="option">
+                            <input type="radio" name="deployment" value="cloud">
+                            <span>☁️ Cloud (Azure, Microsoft Cloud)</span>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="deployment" value="onpremise">
+                            <span>🏢 On-Premise (ติดตั้งในบริษัท)</span>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="deployment" value="hybrid">
+                            <span>🔗 Hybrid (ทั้ง Cloud และ On-Premise)</span>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="deployment" value="edge">
+                            <span>📱 Edge Computing</span>
+                        </div>
+                    </div>
+
+                    <!-- Q7: LLM Model Preference -->
+                    <div class="question-group">
+                        <label><span class="question-number">7</span> ตัวแบบ AI (LLM) ที่ต้องการใช้</label>
+                        <select name="llmModel" id="llmModel">
+                            <option value="">-- เลือกตัวแบบ --</option>
+                            <option value="gpt4">GPT-4 / GPT-4 Turbo (OpenAI)</option>
+                            <option value="copilot">Microsoft Copilot Models</option>
+                            <option value="custom">Custom / On-Premise Models</option>
+                            <option value="multiple">Multiple Models Support</option>
+                            <option value="noPreference">ไม่มีความต้องการเฉพาะ</option>
                         </select>
                     </div>
 
-                    <!-- Question 7: Deployment -->
+                    <!-- Q8: Team Collaboration -->
                     <div class="question-group">
-                        <label>7. วิธีการ Deploy</label>
+                        <label><span class="question-number">8</span> ความต้องการการทำงานเป็นทีม</label>
                         <div class="option">
-                            <input type="radio" name="deployment" value="cloud" id="cloud">
-                            <span>☁️ Cloud (Azure, AWS, GCP)</span>
+                            <input type="radio" name="collaboration" value="solo">
+                            <span>👤 Solo Use (ใช้ลำพัง)</span>
                         </div>
                         <div class="option">
-                            <input type="radio" name="deployment" value="onpremise" id="deploy-onpremise">
-                            <span>🏢 On-Premise</span>
+                            <input type="radio" name="collaboration" value="smallTeam">
+                            <span>👥 Small Team (ทีมเล็ก 2-10 คน)</span>
                         </div>
                         <div class="option">
-                            <input type="radio" name="deployment" value="hybrid" id="hybrid">
-                            <span>🔗 Hybrid</span>
+                            <input type="radio" name="collaboration" value="department">
+                            <span>🏢 Department Level (แผนก)</span>
                         </div>
                         <div class="option">
-                            <input type="radio" name="deployment" value="serverless" id="serverless">
-                            <span>⚡ Serverless</span>
+                            <input type="radio" name="collaboration" value="enterprise">
+                            <span>🌐 Enterprise Scale (บริษัทขนาดใหญ่)</span>
                         </div>
                     </div>
 
-                    <!-- Question 8: Team Experience -->
+                    <!-- Q9: Budget Consideration -->
                     <div class="question-group">
-                        <label>8. ระดับประสบการณ์ของทีมคุณ</label>
-                        <select name="experience" id="experience">
-                            <option value="">-- เลือกระดับ --</option>
-                            <option value="beginner">Beginner (เริ่มใหม่)</option>
-                            <option value="intermediate">Intermediate (ระดับกลาง)</option>
-                            <option value="advanced">Advanced (ขั้นสูง)</option>
-                            <option value="expert">Expert (เชี่ยวชาญ)</option>
-                        </select>
+                        <label><span class="question-number">9</span> ข้อจำกัดด้านงบประมาณ</label>
+                        <div class="option">
+                            <input type="radio" name="budget" value="free">
+                            <span>💚 Free / Low Cost (ฟรีหรือราคาถูก)</span>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="budget" value="moderate">
+                            <span>💛 Moderate (งบประมาณปกติ)</span>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="budget" value="premium">
+                            <span>💜 Premium / Enterprise (ไม่จำกัดงบประมาณ)</span>
+                        </div>
                     </div>
 
-                    <button type="button" onclick="analyzeAnswers()">🔍 วิเคราะห์และหา Framework ที่เหมาะสม</button>
+                    <!-- Q10: Time to Market -->
+                    <div class="question-group">
+                        <label><span class="question-number">10</span> ระยะเวลาในการนำมาใช้งาน (Time-to-Market)</label>
+                        <div class="option">
+                            <input type="radio" name="timeToMarket" value="immediate">
+                            <span>⚡ Immediate (ต้องใช้เร็ว - วันนี้/พรุ่งนี้)</span>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="timeToMarket" value="short">
+                            <span>📅 Short-term (1-2 สัปดาห์)</span>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="timeToMarket" value="medium">
+                            <span>📆 Medium-term (1-3 เดือน)</span>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="timeToMarket" value="longterm">
+                            <span>📊 Long-term (3+ เดือน)</span>
+                        </div>
+                    </div>
+
+                    <button type="button" onclick="analyzeAnswers()">🔍 วิเคราะห์และหาเครื่องมือที่เหมาะสม</button>
                     <button type="reset" class="reset-btn" onclick="resetForm()">🔄 รีเซ็ต</button>
                 </form>
             </div>
 
             <!-- Results Section -->
             <div class="section">
-                <h2>🎯 ผลแนะนำ</h2>
+                <h2>🎯 ผลแนะนำเครื่องมือ</h2>
                 <div id="results" class="results">
-                    <div class="no-results">คำตอบจะแสดงที่นี่หลังจากที่คุณส่งแบบฟอร์ม</div>
+                    <div class="no-results">
+                        📊 คำตอบจะแสดงที่นี่หลังจากที่คุณส่งแบบฟอร์ม<br/>
+                        <small style="color: #ccc;">กรุณาตอบคำถาม 10 ข้อให้ครบถ้วน</small>
+                    </div>
                 </div>
             </div>
         </div>
 
         <footer>
-            <p>BBL Agent Advisory - Microsoft Agent Platform Advisor Tool</p>
-            <p>ยังคง style และ logic เดิมจาก Microsoft Agent Platform Advisor</p>
+            <p>🚀 BBL Microsoft AI Tools Advisor</p>
+            <p>Copilot Chat | Agent Builder | Copilot Studio | Azure Foundry</p>
+            <p style="margin-top: 10px; font-size: 0.85em;">Based on Microsoft AI Platform Advisor</p>
         </footer>
     </div>
 
     <script>
-        const frameworks = {
-            autogen: {
-                name: "AutoGen",
-                icon: "🤖",
-                description: "Multi-agent conversation framework สำหรับสร้าง agent ที่ทำงานร่วมกัน",
-                features: ["Multi-Agent Collaboration", "Conversation Management", "LLM Flexibility", "Function Calling"],
-                languages: ["python"],
-                complexity: ["moderate", "advanced"],
-                useCases: ["multiAgent", "research", "codeAssistance", "businessProcess"],
-                llmProviders: ["openai", "azure", "multiple"],
-                pros: ["ดีสำหรับ multi-agent scenarios", "มี conversation history", "ยืดหยุ่นสูง"],
-                cons: ["Python only", "Learning curve สูง"],
-                website: "https://microsoft.github.io/autogen/",
+        const tools = {
+            copilotChat: {
+                name: "Copilot Chat",
+                icon: "💬",
+                color: "#00D9FF",
+                shortDescription: "Conversational AI chatbot สำหรับการสอบถามและสนทนา",
+                fullDescription: "เครื่องมือแชทแบบอินทรเล็คทีฟที่สามารถตอบคำถามและสนทนากับผู้ใช้ผ่าน UI ที่เรียบง่าย",
+                keyFeatures: [
+                    "💬 Conversational interface (UI อินทุรเล็คทีฟ)",
+                    "🤖 AI-powered responses (ตอบคำถามอัจฉริยะ)",
+                    "📱 Multi-platform support (ใช้ได้หลายแพลตฟอร์ม)",
+                    "🔌 Teams & Microsoft 365 integration",
+                    "⚡ Quick deployment (ติดตั้งง่าย)",
+                    "💰 Cost-effective (ราคาประหยัด)"
+                ],
+                bestFor: ["customerService", "contentGeneration"],
+                languages: ["noCode", "python", "typescript"],
+                expertise: ["beginner", "intermediate"],
+                customization: "minimal",
+                deployment: ["cloud"],
+                collaboration: ["solo", "smallTeam"],
+                pros: [
+                    "✅ ไม่ต้องเขียนโค้ด",
+                    "✅ ติดตั้งและใช้ได้เร็ว",
+                    "✅ เหมาะสำหรับการสนทนา",
+                    "✅ Seamless Teams integration",
+                    "✅ ค่าใช้ไม่สูง"
+                ],
+                cons: [
+                    "❌ Customization จำกัด",
+                    "❌ ไม่เหมาะสำหรับ automation ที่ซับซ้อน",
+                    "❌ ต้อง Cloud",
+                    "❌ Limited integration options"
+                ],
+                links: {
+                    docs: "https://learn.microsoft.com/en-us/copilot/copilot-chat-overview",
+                    website: "https://copilot.microsoft.com/"
+                },
                 matchScore: 0
             },
-            semanticKernel: {
-                name: "Semantic Kernel",
-                icon: "🧠",
-                description: "SDK สำหรับสร้าง agent ด้วย LLM plugins และ skills",
-                features: ["Plugin Architecture", "Memory Management", "Planner", "Cross-Platform"],
-                languages: ["csharp", "python", "typescript"],
-                complexity: ["simple", "moderate", "advanced"],
-                useCases: ["customerService", "contentGeneration", "businessProcess", "codeAssistance"],
-                llmProviders: ["openai", "azure", "multiple"],
-                pros: ["Multi-language support", "Flexible architecture", "ดีสำหรับ enterprise"],
-                cons: ["Steeper learning curve", "Requires more setup"],
-                website: "https://learn.microsoft.com/en-us/semantic-kernel/overview/",
+            agentBuilder: {
+                name: "Agent Builder",
+                icon: "🏗️",
+                color: "#7B2CBF",
+                shortDescription: "Platform untuk membuat agent otomatis yang dapat bekerja dengan berbagai sistem",
+                fullDescription: "Framework komprehensif untuk membangun agent yang dapat diprogram untuk melakukan tugas otomatis, terintegrasi dengan berbagai sistem dan database.",
+                keyFeatures: [
+                    "🤖 Autonomous agents (Agent ที่ทำงานอัตโนมัติ)",
+                    "🔄 Process automation (อัตโนมัติกระบวนการ)",
+                    "🔗 Multi-system integration (เชื่อมต่อหลายระบบ)",
+                    "💻 Developer-friendly APIs",
+                    "🧠 Advanced reasoning (ตัดสินใจเชิงซ้อน)",
+                    "📊 Enterprise-grade (สำหรับองค์กรขนาดใหญ่)"
+                ],
+                bestFor: ["automation", "integration", "research"],
+                languages: ["python", "csharp", "typescript", "java"],
+                expertise: ["intermediate", "advanced", "expert"],
+                customization: "advanced",
+                deployment: ["cloud", "onpremise", "hybrid"],
+                collaboration: ["department", "enterprise"],
+                pros: [
+                    "✅ Powerful automation capabilities",
+                    "✅ Flexible architecture",
+                    "✅ On-premise support",
+                    "✅ Suitable for complex processes",
+                    "✅ Full API access"
+                ],
+                cons: [
+                    "❌ Requires developer skills",
+                    "❌ Steeper learning curve",
+                    "❌ More setup required",
+                    "❌ Higher complexity"
+                ],
+                links: {
+                    docs: "https://learn.microsoft.com/en-us/azure/app-service/overview",
+                    website: "https://azure.microsoft.com/en-us/products/app-service/"
+                },
                 matchScore: 0
             },
-            azureOpenAIAssistants: {
-                name: "Azure OpenAI Assistants API",
-                icon: "🔷",
-                description: "Managed assistant service จาก Azure OpenAI",
-                features: ["Code Interpreter", "Retrieval", "Function Calling", "File Upload"],
-                languages: ["python", "typescript", "csharp", "java"],
-                complexity: ["simple", "moderate"],
-                useCases: ["customerService", "dataAnalysis", "codeAssistance"],
-                llmProviders: ["azure"],
-                pros: ["Easy to use", "Managed service", "Built-in tools"],
-                cons: ["Azure dependency", "Limited customization"],
-                website: "https://platform.openai.com/docs/assistants/overview",
+            copilotStudio: {
+                name: "Copilot Studio",
+                icon: "🎨",
+                color: "#FF6B6B",
+                shortDescription: "Low-code platform untuk membuat copilot dan chatbot tanpa perlu coding",
+                fullDescription: "Platform visual no-code/low-code yang memungkinkan siapa saja membuat copilot dan chatbot yang canggih tanpa perlu keahlian programming.",
+                keyFeatures: [
+                    "🎨 Visual builder (Drag-and-drop interface)",
+                    "⚙️ No-code/Low-code (ไม่ต้องเขียนโค้ด)",
+                    "🔄 Process flows (Alur kerja otomatis)",
+                    "🧠 AI-powered conversations (Percakapan AI)",
+                    "📊 Analytics & Monitoring (ติดตามประสิทธิภาพ)",
+                    "🔗 Microsoft ecosystem integration"
+                ],
+                bestFor: ["customerService", "contentGeneration", "automation"],
+                languages: ["noCode"],
+                expertise: ["beginner", "intermediate"],
+                customization: "moderate",
+                deployment: ["cloud"],
+                collaboration: ["smallTeam", "department"],
+                pros: [
+                    "✅ Visual interface (ไม่ต้องเขียนโค้ด)",
+                    "✅ Quick to build (สร้างเร็ว)",
+                    "✅ Powerful features",
+                    "✅ Built-in analytics",
+                    "✅ Great for business users"
+                ],
+                cons: [
+                    "❌ Limited customization",
+                    "❌ Cloud-only",
+                    "❌ Less flexible than code-based solutions",
+                    "❌ Limited on-premise options"
+                ],
+                links: {
+                    docs: "https://learn.microsoft.com/en-us/power-platform/guidance/adoption/",
+                    website: "https://www.microsoft.com/en-us/power-platform/copilot-studio"
+                },
                 matchScore: 0
             },
-            promptFlow: {
-                name: "Prompt Flow",
-                icon: "🌊",
-                description: "Low-code tool สำหรับสร้าง LLM workflows และ applications",
-                features: ["Visual DAG", "Experimentation", "Deployment", "Evaluation"],
-                languages: ["python", "typescript"],
-                complexity: ["simple", "moderate"],
-                useCases: ["contentGeneration", "businessProcess", "dataAnalysis"],
-                llmProviders: ["openai", "azure", "multiple"],
-                pros: ["Easy visual design", "Built-in evaluation", "Low-code"],
-                cons: ["Limited customization", "Azure-focused"],
-                website: "https://microsoft.github.io/promptflow/",
-                matchScore: 0
-            },
-            langchain: {
-                name: "LangChain",
-                icon: "🔗",
-                description: "Framework สำหรับสร้าง LLM applications ด้วย chains และ agents",
-                features: ["Chains", "Agents", "Memory", "Integrations"],
-                languages: ["python", "typescript"],
-                complexity: ["simple", "moderate", "advanced"],
-                useCases: ["customerService", "research", "contentGeneration", "businessProcess"],
-                llmProviders: ["openai", "azure", "multiple", "onpremise"],
-                pros: ["Rich integrations", "Flexible", "Community support"],
-                cons: ["Rapid changes", "Documentation gaps"],
-                website: "https://python.langchain.com/",
-                matchScore: 0
-            },
-            cognitiveServices: {
-                name: "Azure Cognitive Services",
-                icon: "☁️",
-                description: "Collection of AI services สำหรับ vision, language, speech",
-                features: ["Vision API", "Language Service", "Speech", "Document Intelligence"],
-                languages: ["python", "typescript", "csharp", "java"],
-                complexity: ["simple", "moderate"],
-                useCases: ["dataAnalysis", "research", "customerService"],
-                llmProviders: ["azure"],
-                pros: ["Managed services", "Enterprise support", "Comprehensive"],
-                cons: ["Azure-only", "Pay per use"],
-                website: "https://azure.microsoft.com/en-us/products/cognitive-services/",
+            azureFoundry: {
+                name: "Azure Foundry",
+                icon: "⛏️",
+                color: "#0078D4",
+                shortDescription: "Azure infrastructure dan services untuk membangun, deploy, dan scale AI applications",
+                fullDescription: "Kumpulan layanan Azure yang terintegrasi untuk membangun, melatih, deploy, dan mengelola aplikasi AI dan machine learning pada skala enterprise.",
+                keyFeatures: [
+                    "🔧 Comprehensive toolset (Lengkap)",
+                    "📊 Azure Machine Learning (ML tools)",
+                    "🗄️ Data & Analytics (Big data support)",
+                    "🚀 Deployment & Scaling (Auto-scaling)",
+                    "🔒 Security & Compliance (Enterprise security)",
+                    "📈 Enterprise-grade performance (Powerful infrastructure)"
+                ],
+                bestFor: ["research", "automation", "integration"],
+                languages: ["python", "csharp", "typescript", "java", "multilingual"],
+                expertise: ["advanced", "expert"],
+                customization: "advanced",
+                deployment: ["cloud", "hybrid"],
+                collaboration: ["enterprise"],
+                pros: [
+                    "✅ Powerful ML capabilities",
+                    "✅ Scalable infrastructure",
+                    "✅ Enterprise security",
+                    "✅ Comprehensive toolset",
+                    "✅ Strong support",
+                    "✅ High performance"
+                ],
+                cons: [
+                    "❌ Requires technical expertise",
+                    "❌ Steep learning curve",
+                    "❌ Higher costs",
+                    "❌ Complex setup",
+                    "❌ On-premise limited"
+                ],
+                links: {
+                    docs: "https://learn.microsoft.com/en-us/azure/machine-learning/",
+                    website: "https://azure.microsoft.com/en-us/products/machine-learning/azure-machine-learning/"
+                },
                 matchScore: 0
             }
         };
@@ -526,99 +783,164 @@
         function analyzeAnswers() {
             const formData = new FormData(document.getElementById('advisorForm'));
             
-            // Get single select values
-            const agentType = formData.get('agentType');
-            const language = formData.get('language');
-            const llmProvider = formData.get('llmProvider');
-            const complexity = formData.get('complexity');
             const useCase = formData.get('useCase');
+            const language = formData.get('language');
+            const expertise = formData.get('expertise');
+            const customization = formData.get('customization');
             const deployment = formData.get('deployment');
-            const experience = formData.get('experience');
-            
-            // Get multiple checkbox values
-            const features = formData.getAll('features');
+            const llmModel = formData.get('llmModel');
+            const collaboration = formData.get('collaboration');
+            const budget = formData.get('budget');
+            const timeToMarket = formData.get('timeToMarket');
+            const integrations = formData.getAll('integration');
 
-            // Validate required fields
-            if (!agentType || !language || !llmProvider || !complexity || !useCase || !deployment || !experience) {
-                alert('กรุณาตอบคำถามทั้งหมด');
+            // Validate
+            if (!useCase || !language || !expertise || !customization || !deployment || !collaboration || !budget || !timeToMarket) {
+                alert('❌ กรุณาตอบคำถามทั้ง 10 ข้อให้ครบถ้วน');
                 return;
             }
 
-            // Calculate match scores
-            for (const [key, framework] of Object.entries(frameworks)) {
+            // Calculate scores
+            for (const [key, tool] of Object.entries(tools)) {
                 let score = 0;
-                let matches = 0;
+                const weights = {
+                    useCase: 15,
+                    language: 15,
+                    expertise: 12,
+                    customization: 12,
+                    deployment: 12,
+                    collaboration: 12,
+                    budget: 10,
+                    timeToMarket: 12
+                };
 
-                // Language match (20%)
-                if (framework.languages.includes(language) || framework.languages.includes('multi')) {
-                    score += 20;
+                // Use Case (15%)
+                if (tool.bestFor.includes(useCase)) {
+                    score += weights.useCase;
                 }
-                matches += 20;
 
-                // Complexity match (15%)
-                if (framework.complexity.includes(complexity)) {
-                    score += 15;
+                // Language (15%)
+                if (tool.languages.includes(language)) {
+                    score += weights.language;
                 }
-                matches += 15;
 
-                // Use case match (20%)
-                if (framework.useCases.includes(useCase)) {
-                    score += 20;
+                // Expertise (12%)
+                if (tool.expertise.includes(expertise)) {
+                    score += weights.expertise;
                 }
-                matches += 20;
 
-                // LLM Provider match (15%)
-                if (framework.llmProviders.includes(llmProvider) || framework.llmProviders.includes('multiple')) {
-                    score += 15;
+                // Customization (12%)
+                if (tool.customization === customization || 
+                    (customization === 'minimal' && tool.customization === 'minimal') ||
+                    (customization === 'moderate' && (tool.customization === 'minimal' || tool.customization === 'moderate')) ||
+                    (customization === 'advanced' && (tool.customization === 'moderate' || tool.customization === 'advanced'))) {
+                    score += weights.customization;
                 }
-                matches += 15;
 
-                // Agent type compatibility (10%)
-                if (agentType === 'collaborative' && key === 'autogen') {
-                    score += 10;
-                } else if (agentType === 'conversational' && (key === 'azureOpenAIAssistants' || key === 'semanticKernel')) {
-                    score += 10;
-                } else if (agentType === 'autonomous' && (key === 'autogen' || key === 'semanticKernel' || key === 'langchain')) {
-                    score += 10;
+                // Deployment (12%)
+                if (tool.deployment.includes(deployment)) {
+                    score += weights.deployment;
                 }
-                matches += 10;
 
-                // Experience level (10%)
-                if (experience === 'beginner' && (key === 'azureOpenAIAssistants' || key === 'promptFlow')) {
-                    score += 10;
-                } else if (experience === 'expert' && (key === 'autogen' || key === 'semanticKernel')) {
-                    score += 10;
-                } else if ((experience === 'intermediate' || experience === 'advanced') && !key.includes('simple')) {
-                    score += 5;
+                // Collaboration (12%)
+                if (tool.collaboration.includes(collaboration)) {
+                    score += weights.collaboration;
                 }
-                matches += 10;
 
-                framework.matchScore = Math.round((score / matches) * 100);
+                // Budget (10%)
+                if (budget === 'free' && (key === 'copilotChat' || key === 'copilotStudio')) {
+                    score += weights.budget;
+                } else if (budget === 'moderate' && (key === 'copilotChat' || key === 'copilotStudio' || key === 'agentBuilder')) {
+                    score += weights.budget * 0.8;
+                } else if (budget === 'premium') {
+                    score += weights.budget * 0.9;
+                }
+
+                // Time to Market (12%)
+                if (timeToMarket === 'immediate' && (key === 'copilotChat' || key === 'copilotStudio')) {
+                    score += weights.timeToMarket;
+                } else if (timeToMarket === 'short' && (key === 'copilotChat' || key === 'copilotStudio' || key === 'agentBuilder')) {
+                    score += weights.timeToMarket * 0.8;
+                } else if ((timeToMarket === 'medium' || timeToMarket === 'longterm')) {
+                    score += weights.timeToMarket * 0.7;
+                }
+
+                // Integration bonus
+                if (integrations.length > 0) {
+                    if (integrations.includes('teams') && (key === 'copilotChat' || key === 'copilotStudio')) {
+                        score += 8;
+                    }
+                    if (integrations.includes('apis') && (key === 'agentBuilder' || key === 'azureFoundry')) {
+                        score += 8;
+                    }
+                    if (integrations.includes('databases') && (key === 'agentBuilder' || key === 'azureFoundry')) {
+                        score += 8;
+                    }
+                }
+
+                const totalWeight = Object.values(weights).reduce((a, b) => a + b, 0) + (integrations.length > 0 ? 24 : 0);
+                tool.matchScore = Math.round((score / totalWeight) * 100);
             }
 
-            // Sort by match score
-            const sortedFrameworks = Object.entries(frameworks)
+            // Sort by score
+            const sortedTools = Object.entries(tools)
                 .sort((a, b) => b[1].matchScore - a[1].matchScore);
 
             // Display results
             const resultsDiv = document.getElementById('results');
             resultsDiv.innerHTML = '';
 
-            sortedFrameworks.forEach(([key, framework]) => {
+            sortedTools.forEach((entry, index) => {
+                const [key, tool] = entry;
+                const rankClass = `ranking-${index + 1}`;
+                const rankLabel = ['🥇 Top Choice', '🥈 Second Choice', '🥉 Third Choice', 'Alternative'][index];
+
                 const resultHTML = `
                     <div class="result-item">
-                        <h3>${framework.icon} ${framework.name}</h3>
-                        <p>${framework.description}</p>
-                        <p><span class="match-score">ความเหมาะสม: ${framework.matchScore}%</span></p>
-                        <p><strong>ข้อดี:</strong></p>
-                        <ul class="feature-list">
-                            ${framework.pros.map(pro => `<li>${pro}</li>`).join('')}
-                        </ul>
-                        <p><strong>ข้อจำกัด:</strong></p>
-                        <ul class="feature-list">
-                            ${framework.cons.map(con => `<li>${con}</li>`).join('')}
-                        </ul>
-                        <p><a href="${framework.website}" target="_blank" style="color: #667eea; text-decoration: none; font-weight: 600;">📖 ดูเพิ่มเติม →</a></p>
+                        <div class="result-header">
+                            <div>
+                                <span class="tool-icon">${tool.icon}</span>
+                                <h3 style="display: inline-block;">${tool.name}</h3>
+                                ${index < 3 ? `<span class="ranking-badge ${rankClass}">${rankLabel}</span>` : ''}
+                            </div>
+                            <div class="match-score">⭐ ${tool.matchScore}%</div>
+                        </div>
+
+                        <div class="description-box">
+                            ${tool.fullDescription}
+                        </div>
+
+                        <div class="section-box">
+                            <strong>🎯 คุณสมบัติหลัก:</strong>
+                            <ul class="feature-list">
+                                ${tool.keyFeatures.map(f => `<li>${f}</li>`).join('')}
+                            </ul>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <div class="section-box pros">
+                                <strong>✅ ข้อดี:</strong>
+                                <ul class="feature-list">
+                                    ${tool.pros.map(p => `<li>${p}</li>`).join('')}
+                                </ul>
+                            </div>
+                            <div class="section-box cons">
+                                <strong>❌ ข้อจำกัด:</strong>
+                                <ul class="feature-list">
+                                    ${tool.cons.map(c => `<li>${c}</li>`).join('')}
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="recommendation-box">
+                            <strong>💡 คำแนะนำ:</strong>
+                            <p style="margin-top: 8px; color: #555;">${getRecommendation(key, useCase, expertise, customization)}</p>
+                        </div>
+
+                        <p style="margin-top: 15px;">
+                            <a href="${tool.links.docs}" target="_blank" class="tool-link">📖 ดูเอกสาร</a>
+                            <a href="${tool.links.website}" target="_blank" class="tool-link" style="margin-left: 15px;">🌐 ไปยังเว็บไซต์</a>
+                        </p>
                     </div>
                 `;
                 resultsDiv.innerHTML += resultHTML;
@@ -627,33 +949,33 @@
             updateProgress();
         }
 
+        function getRecommendation(toolKey, useCase, expertise, customization) {
+            const recommendations = {
+                copilotChat: "เหมาะสำหรับผู้ที่ต้องการเริ่มต้นอย่างรวดเร็ว หรือต้องการใช้งาน customer service แบบง่าย ๆ ไม่ต้องกังวลเรื่อง setup",
+                agentBuilder: "เหมาะสำหรับทีมพัฒนาที่ต้องการสร้าง agents ที่ซับซ้อน สามารถทำงานอัตโนมัติ และเชื่อมต่อกับระบบจำนวนมาก",
+                copilotStudio: "เหมาะสำหรับธุรกิจที่ต้องการสร้าง copilots โดยไม่มีความรู้ด้าน coding มีอินเทอร์เฟซที่ใช้งานง่าย",
+                azureFoundry: "เหมาะสำหรับองค์กรขนาดใหญ่ที่ต้อง machine learning และการวิเคราะห์ข้อมูลขั้นสูง เต็มไปด้วยความยืดหยุ่น"
+            };
+            return recommendations[toolKey] || "คำแนะนำที่ปรับแต่ง";
+        }
+
         function resetForm() {
             document.getElementById('advisorForm').reset();
-            document.getElementById('results').innerHTML = '<div class="no-results">คำตอบจะแสดงที่นี่หลังจากที่คุณส่งแบบฟอร์ม</div>';
+            document.getElementById('results').innerHTML = `
+                <div class="no-results">
+                    📊 คำตอบจะแสดงที่นี่หลังจากที่คุณส่งแบบฟอร์ม<br/>
+                    <small style="color: #ccc;">กรุณาตอบคำถาม 10 ข้อให้ครบถ้วน</small>
+                </div>
+            `;
             updateProgress();
         }
 
         function updateProgress() {
             const form = document.getElementById('advisorForm');
             const inputs = form.querySelectorAll('input[type="radio"], input[type="checkbox"], select');
+            const groups = new Set();
             let filled = 0;
 
-            inputs.forEach(input => {
-                if (input.type === 'checkbox') {
-                    // Count checkboxes as filled if at least one is checked in the group
-                    const group = form.querySelectorAll(`input[name="${input.name}"]`);
-                    const isAnyChecked = Array.from(group).some(cb => cb.checked);
-                    if (isAnyChecked) filled++;
-                } else if (input.type === 'radio') {
-                    // Count radio as filled if any in group is checked
-                    if (input.checked) filled++;
-                } else if (input.tagName === 'SELECT') {
-                    if (input.value) filled++;
-                }
-            });
-
-            // Count unique groups
-            const groups = new Set();
             inputs.forEach(input => {
                 if (input.type === 'radio' || input.type === 'checkbox') {
                     groups.add(input.name);
@@ -662,11 +984,16 @@
                 }
             });
 
+            Array.from(groups).forEach(groupName => {
+                const groupInputs = form.querySelectorAll(`input[name="${groupName}"], select[name="${groupName}"]`);
+                const isChecked = Array.from(groupInputs).some(input => input.checked || input.value);
+                if (isChecked) filled++;
+            });
+
             const progress = groups.size > 0 ? (filled / groups.size) * 100 : 0;
             document.getElementById('progressBar').style.width = progress + '%';
         }
 
-        // Update progress on form change
         document.addEventListener('DOMContentLoaded', () => {
             const form = document.getElementById('advisorForm');
             form.addEventListener('change', updateProgress);
