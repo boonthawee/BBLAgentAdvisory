@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BBL Agent Advisory - Microsoft Agent Platform Advisor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            padding-top: 20px;
+        }
+
+        header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        @media (max-width: 968px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .section h2 {
+            color: #333;
+            margin-bottom: 25px;
+            font-size: 1.6em;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .question-group {
+            margin-bottom: 25px;
+        }
+
+        .question-group label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 12px;
+            font-size: 1em;
+        }
+
+        .question-group input[type="radio"],
+        .question-group input[type="checkbox"] {
+            margin-right: 8px;
+            cursor: pointer;
+            width: 18px;
+            height: 18px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 6px;
+            background: #f5f5f5;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .option:hover {
+            background: #e8e8f5;
+        }
+
+        .option input:checked + span {
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .option span {
+            cursor: pointer;
+            flex-grow: 1;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1em;
+            background: white;
+            cursor: pointer;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 14px 30px;
+            font-size: 1.1em;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .results {
+            margin-top: 20px;
+        }
+
+        .result-item {
+            background: #f9f9f9;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 6px;
+            transition: all 0.3s;
+        }
+
+        .result-item:hover {
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .result-item h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .result-item p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 8px;
+        }
+
+        .match-score {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+
+        .feature-list {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        .feature-list li {
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        .reset-btn {
+            background: #999;
+            margin-top: 15px;
+        }
+
+        .reset-btn:hover {
+            box-shadow: 0 5px 20px rgba(153, 153, 153, 0.4);
+        }
+
+        .progress {
+            margin-bottom: 20px;
+            height: 6px;
+            background: #e0e0e0;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s;
+        }
+
+        .no-results {
+            text-align: center;
+            color: #999;
+            padding: 20px;
+            font-style: italic;
+        }
+
+        footer {
+            text-align: center;
+            color: white;
+            margin-top: 40px;
+            padding-bottom: 20px;
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+
+        .info-box {
+            background: #e8f4f8;
+            border-left: 4px solid #0078d4;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 6px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🤖 Agent Platform Advisor</h1>
+            <p>ช่วยคุณค้นหา Microsoft Agent Framework ที่เหมาะสมที่สุด</p>
+        </header>
+
+        <div class="content">
+            <!-- Questions Section -->
+            <div class="section">
+                <h2>📋 แบบประเมิน</h2>
+                <div class="progress">
+                    <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="info-box">
+                    ตอบคำถามต่างๆ เพื่อให้ระบบแนะนำ Microsoft Agent Framework ที่ตรงกับความต้องการของคุณ
+                </div>
+
+                <form id="advisorForm">
+                    <!-- Question 1: Agent Type -->
+                    <div class="question-group">
+                        <label>1. ประเภทของ Agent ที่คุณต้องการ</label>
+                        <div class="option">
+                            <input type="radio" name="agentType" value="conversational" id="conversational">
+                            <span>💬 Conversational Agent (แชทบอท)</span>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="agentType" value="autonomous" id="autonomous">
+                            <span>🔄 Autonomous Agent (ทำงานอัตโนมัติ)</span>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="agentType" value="collaborative" id="collaborative">
+                            <span>👥 Collaborative Agent (หลายตัวทำงานร่วมกัน)</span>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="agentType" value="expert" id="expert">
+                            <span>🧠 Expert Agent (เชี่ยวชาญเฉพาะด้าน)</span>
+                        </div>
+                    </div>
+
+                    <!-- Question 2: Primary Language -->
+                    <div class="question-group">
+                        <label>2. ภาษาโปรแกรมที่คุณต้องการใช้</label>
+                        <select name="language" id="language">
+                            <option value="">-- เลือกภาษา --</option>
+                            <option value="python">Python</option>
+                            <option value="csharp">C# / .NET</option>
+                            <option value="typescript">TypeScript / JavaScript</option>
+                            <option value="java">Java</option>
+                            <option value="multi">Multi-Language / Language Agnostic</option>
+                        </select>
+                    </div>
+
+                    <!-- Question 3: LLM Provider -->
+                    <div class="question-group">
+                        <label>3. ผู้ให้บริการ LLM ที่คุณต้องการ</label>
+                        <div class="option">
+                            <input type="radio" name="llmProvider" value="openai" id="openai">
+                            <span>🔷 OpenAI (GPT-4, GPT-4o)</span>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="llmProvider" value="azure" id="azure">
+                            <span>☁️ Azure OpenAI</span>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="llmProvider" value="multiple" id="multiple">
+                            <span>🔄 Multiple Providers</span>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="llmProvider" value="onpremise" id="onpremise">
+                            <span>🏢 On-Premise / Self-hosted</span>
+                        </div>
+                    </div>
+
+                    <!-- Question 4: Complexity -->
+                    <div class="question-group">
+                        <label>4. ระดับความซับซ้อน</label>
+                        <div class="option">
+                            <input type="radio" name="complexity" value="simple" id="simple">
+                            <span>🟢 Simple (เริ่มต้น)</span>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="complexity" value="moderate" id="moderate">
+                            <span>🟡 Moderate (ปานกลาง)</span>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="complexity" value="advanced" id="advanced">
+                            <span>🔴 Advanced (ขั้นสูง)</span>
+                        </div>
+                    </div>
+
+                    <!-- Question 5: Features -->
+                    <div class="question-group">
+                        <label>5. คุณสมบัติที่สำคัญ (เลือกได้หลายข้อ)</label>
+                        <div class="option">
+                            <input type="checkbox" name="features" value="memoryCaching">
+                            <span>💾 Memory & Caching</span>
+                        </div>
+                        <div class="option">
+                            <input type="checkbox" name="features" value="toolCalling">
+                            <span>🔧 Tool/Function Calling</span>
+                        </div>
+                        <div class="option">
+                            <input type="checkbox" name="features" value="ragRetrieval">
+                            <span>📚 RAG (Retrieval-Augmented Generation)</span>
+                        </div>
+                        <div class="option">
+                            <input type="checkbox" name="features" value="orchestration">
+                            <span>🎼 Orchestration & Workflow</span>
+                        </div>
+                        <div class="option">
+                            <input type="checkbox" name="features" value="prompt">
+                            <span>✏️ Advanced Prompt Management</span>
+                        </div>
+                        <div class="option">
+                            <input type="checkbox" name="features" value="monitoring">
+                            <span>📊 Monitoring & Logging</span>
+                        </div>
+                    </div>
+
+                    <!-- Question 6: Use Case -->
+                    <div class="question-group">
+                        <label>6. กรณีใช้งานหลัก</label>
+                        <select name="useCase" id="useCase">
+                            <option value="">-- เลือกกรณีใช้งาน --</option>
+                            <option value="customerService">Customer Service / Support</option>
+                            <option value="dataAnalysis">Data Analysis & Reporting</option>
+                            <option value="contentGeneration">Content Generation</option>
+                            <option value="businessProcess">Business Process Automation</option>
+                            <option value="research">Research & Information Gathering</option>
+                            <option value="codeAssistance">Code Assistance & Development</option>
+                            <option value="multiAgent">Multi-Agent Orchestration</option>
+                            <option value="other">Other / Mixed Use Cases</option>
+                        </select>
+                    </div>
+
+                    <!-- Question 7: Deployment -->
+                    <div class="question-group">
+                        <label>7. วิธีการ Deploy</label>
+                        <div class="option">
+                            <input type="radio" name="deployment" value="cloud" id="cloud">
+                            <span>☁️ Cloud (Azure, AWS, GCP)</span>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="deployment" value="onpremise" id="deploy-onpremise">
+                            <span>🏢 On-Premise</span>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="deployment" value="hybrid" id="hybrid">
+                            <span>🔗 Hybrid</span>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="deployment" value="serverless" id="serverless">
+                            <span>⚡ Serverless</span>
+                        </div>
+                    </div>
+
+                    <!-- Question 8: Team Experience -->
+                    <div class="question-group">
+                        <label>8. ระดับประสบการณ์ของทีมคุณ</label>
+                        <select name="experience" id="experience">
+                            <option value="">-- เลือกระดับ --</option>
+                            <option value="beginner">Beginner (เริ่มใหม่)</option>
+                            <option value="intermediate">Intermediate (ระดับกลาง)</option>
+                            <option value="advanced">Advanced (ขั้นสูง)</option>
+                            <option value="expert">Expert (เชี่ยวชาญ)</option>
+                        </select>
+                    </div>
+
+                    <button type="button" onclick="analyzeAnswers()">🔍 วิเคราะห์และหา Framework ที่เหมาะสม</button>
+                    <button type="reset" class="reset-btn" onclick="resetForm()">🔄 รีเซ็ต</button>
+                </form>
+            </div>
+
+            <!-- Results Section -->
+            <div class="section">
+                <h2>🎯 ผลแนะนำ</h2>
+                <div id="results" class="results">
+                    <div class="no-results">คำตอบจะแสดงที่นี่หลังจากที่คุณส่งแบบฟอร์ม</div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>BBL Agent Advisory - Microsoft Agent Platform Advisor Tool</p>
+            <p>ยังคง style และ logic เดิมจาก Microsoft Agent Platform Advisor</p>
+        </footer>
+    </div>
+
+    <script>
+        const frameworks = {
+            autogen: {
+                name: "AutoGen",
+                icon: "🤖",
+                description: "Multi-agent conversation framework สำหรับสร้าง agent ที่ทำงานร่วมกัน",
+                features: ["Multi-Agent Collaboration", "Conversation Management", "LLM Flexibility", "Function Calling"],
+                languages: ["python"],
+                complexity: ["moderate", "advanced"],
+                useCases: ["multiAgent", "research", "codeAssistance", "businessProcess"],
+                llmProviders: ["openai", "azure", "multiple"],
+                pros: ["ดีสำหรับ multi-agent scenarios", "มี conversation history", "ยืดหยุ่นสูง"],
+                cons: ["Python only", "Learning curve สูง"],
+                website: "https://microsoft.github.io/autogen/",
+                matchScore: 0
+            },
+            semanticKernel: {
+                name: "Semantic Kernel",
+                icon: "🧠",
+                description: "SDK สำหรับสร้าง agent ด้วย LLM plugins และ skills",
+                features: ["Plugin Architecture", "Memory Management", "Planner", "Cross-Platform"],
+                languages: ["csharp", "python", "typescript"],
+                complexity: ["simple", "moderate", "advanced"],
+                useCases: ["customerService", "contentGeneration", "businessProcess", "codeAssistance"],
+                llmProviders: ["openai", "azure", "multiple"],
+                pros: ["Multi-language support", "Flexible architecture", "ดีสำหรับ enterprise"],
+                cons: ["Steeper learning curve", "Requires more setup"],
+                website: "https://learn.microsoft.com/en-us/semantic-kernel/overview/",
+                matchScore: 0
+            },
+            azureOpenAIAssistants: {
+                name: "Azure OpenAI Assistants API",
+                icon: "🔷",
+                description: "Managed assistant service จาก Azure OpenAI",
+                features: ["Code Interpreter", "Retrieval", "Function Calling", "File Upload"],
+                languages: ["python", "typescript", "csharp", "java"],
+                complexity: ["simple", "moderate"],
+                useCases: ["customerService", "dataAnalysis", "codeAssistance"],
+                llmProviders: ["azure"],
+                pros: ["Easy to use", "Managed service", "Built-in tools"],
+                cons: ["Azure dependency", "Limited customization"],
+                website: "https://platform.openai.com/docs/assistants/overview",
+                matchScore: 0
+            },
+            promptFlow: {
+                name: "Prompt Flow",
+                icon: "🌊",
+                description: "Low-code tool สำหรับสร้าง LLM workflows และ applications",
+                features: ["Visual DAG", "Experimentation", "Deployment", "Evaluation"],
+                languages: ["python", "typescript"],
+                complexity: ["simple", "moderate"],
+                useCases: ["contentGeneration", "businessProcess", "dataAnalysis"],
+                llmProviders: ["openai", "azure", "multiple"],
+                pros: ["Easy visual design", "Built-in evaluation", "Low-code"],
+                cons: ["Limited customization", "Azure-focused"],
+                website: "https://microsoft.github.io/promptflow/",
+                matchScore: 0
+            },
+            langchain: {
+                name: "LangChain",
+                icon: "🔗",
+                description: "Framework สำหรับสร้าง LLM applications ด้วย chains และ agents",
+                features: ["Chains", "Agents", "Memory", "Integrations"],
+                languages: ["python", "typescript"],
+                complexity: ["simple", "moderate", "advanced"],
+                useCases: ["customerService", "research", "contentGeneration", "businessProcess"],
+                llmProviders: ["openai", "azure", "multiple", "onpremise"],
+                pros: ["Rich integrations", "Flexible", "Community support"],
+                cons: ["Rapid changes", "Documentation gaps"],
+                website: "https://python.langchain.com/",
+                matchScore: 0
+            },
+            cognitiveServices: {
+                name: "Azure Cognitive Services",
+                icon: "☁️",
+                description: "Collection of AI services สำหรับ vision, language, speech",
+                features: ["Vision API", "Language Service", "Speech", "Document Intelligence"],
+                languages: ["python", "typescript", "csharp", "java"],
+                complexity: ["simple", "moderate"],
+                useCases: ["dataAnalysis", "research", "customerService"],
+                llmProviders: ["azure"],
+                pros: ["Managed services", "Enterprise support", "Comprehensive"],
+                cons: ["Azure-only", "Pay per use"],
+                website: "https://azure.microsoft.com/en-us/products/cognitive-services/",
+                matchScore: 0
+            }
+        };
+
+        function analyzeAnswers() {
+            const formData = new FormData(document.getElementById('advisorForm'));
+            
+            // Get single select values
+            const agentType = formData.get('agentType');
+            const language = formData.get('language');
+            const llmProvider = formData.get('llmProvider');
+            const complexity = formData.get('complexity');
+            const useCase = formData.get('useCase');
+            const deployment = formData.get('deployment');
+            const experience = formData.get('experience');
+            
+            // Get multiple checkbox values
+            const features = formData.getAll('features');
+
+            // Validate required fields
+            if (!agentType || !language || !llmProvider || !complexity || !useCase || !deployment || !experience) {
+                alert('กรุณาตอบคำถามทั้งหมด');
+                return;
+            }
+
+            // Calculate match scores
+            for (const [key, framework] of Object.entries(frameworks)) {
+                let score = 0;
+                let matches = 0;
+
+                // Language match (20%)
+                if (framework.languages.includes(language) || framework.languages.includes('multi')) {
+                    score += 20;
+                }
+                matches += 20;
+
+                // Complexity match (15%)
+                if (framework.complexity.includes(complexity)) {
+                    score += 15;
+                }
+                matches += 15;
+
+                // Use case match (20%)
+                if (framework.useCases.includes(useCase)) {
+                    score += 20;
+                }
+                matches += 20;
+
+                // LLM Provider match (15%)
+                if (framework.llmProviders.includes(llmProvider) || framework.llmProviders.includes('multiple')) {
+                    score += 15;
+                }
+                matches += 15;
+
+                // Agent type compatibility (10%)
+                if (agentType === 'collaborative' && key === 'autogen') {
+                    score += 10;
+                } else if (agentType === 'conversational' && (key === 'azureOpenAIAssistants' || key === 'semanticKernel')) {
+                    score += 10;
+                } else if (agentType === 'autonomous' && (key === 'autogen' || key === 'semanticKernel' || key === 'langchain')) {
+                    score += 10;
+                }
+                matches += 10;
+
+                // Experience level (10%)
+                if (experience === 'beginner' && (key === 'azureOpenAIAssistants' || key === 'promptFlow')) {
+                    score += 10;
+                } else if (experience === 'expert' && (key === 'autogen' || key === 'semanticKernel')) {
+                    score += 10;
+                } else if ((experience === 'intermediate' || experience === 'advanced') && !key.includes('simple')) {
+                    score += 5;
+                }
+                matches += 10;
+
+                framework.matchScore = Math.round((score / matches) * 100);
+            }
+
+            // Sort by match score
+            const sortedFrameworks = Object.entries(frameworks)
+                .sort((a, b) => b[1].matchScore - a[1].matchScore);
+
+            // Display results
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '';
+
+            sortedFrameworks.forEach(([key, framework]) => {
+                const resultHTML = `
+                    <div class="result-item">
+                        <h3>${framework.icon} ${framework.name}</h3>
+                        <p>${framework.description}</p>
+                        <p><span class="match-score">ความเหมาะสม: ${framework.matchScore}%</span></p>
+                        <p><strong>ข้อดี:</strong></p>
+                        <ul class="feature-list">
+                            ${framework.pros.map(pro => `<li>${pro}</li>`).join('')}
+                        </ul>
+                        <p><strong>ข้อจำกัด:</strong></p>
+                        <ul class="feature-list">
+                            ${framework.cons.map(con => `<li>${con}</li>`).join('')}
+                        </ul>
+                        <p><a href="${framework.website}" target="_blank" style="color: #667eea; text-decoration: none; font-weight: 600;">📖 ดูเพิ่มเติม →</a></p>
+                    </div>
+                `;
+                resultsDiv.innerHTML += resultHTML;
+            });
+
+            updateProgress();
+        }
+
+        function resetForm() {
+            document.getElementById('advisorForm').reset();
+            document.getElementById('results').innerHTML = '<div class="no-results">คำตอบจะแสดงที่นี่หลังจากที่คุณส่งแบบฟอร์ม</div>';
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const form = document.getElementById('advisorForm');
+            const inputs = form.querySelectorAll('input[type="radio"], input[type="checkbox"], select');
+            let filled = 0;
+
+            inputs.forEach(input => {
+                if (input.type === 'checkbox') {
+                    // Count checkboxes as filled if at least one is checked in the group
+                    const group = form.querySelectorAll(`input[name="${input.name}"]`);
+                    const isAnyChecked = Array.from(group).some(cb => cb.checked);
+                    if (isAnyChecked) filled++;
+                } else if (input.type === 'radio') {
+                    // Count radio as filled if any in group is checked
+                    if (input.checked) filled++;
+                } else if (input.tagName === 'SELECT') {
+                    if (input.value) filled++;
+                }
+            });
+
+            // Count unique groups
+            const groups = new Set();
+            inputs.forEach(input => {
+                if (input.type === 'radio' || input.type === 'checkbox') {
+                    groups.add(input.name);
+                } else if (input.tagName === 'SELECT') {
+                    groups.add(input.name);
+                }
+            });
+
+            const progress = groups.size > 0 ? (filled / groups.size) * 100 : 0;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+
+        // Update progress on form change
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('advisorForm');
+            form.addEventListener('change', updateProgress);
+            updateProgress();
+        });
+    </script>
+</body>
+</html>
